@@ -100,14 +100,44 @@
                     }
                 }
 
+                const open = {
+                    text: self.__('Open'),
+                    onClick: (e, toast) => {
+                        let key = 'notification-' + notification.id;
+                        let arr = self.$refs[key];
+                        arr[0].markAsRead();
+                        toast.goAway(0);
+
+                        if(notification.url) {
+                            if(notification.external){
+                                window.open(URL, '_blank');
+                            } else {
+                                window.location.href = url;
+                            }
+                        } else if (notification.route) {
+                            router.push(notification.route)
+                        } else {
+                            throw "No url or route to send to"
+                        }
+                    }
+                }
+
+                let cancelText = 'Cancel'
+                if (notification.cancel_text) {
+                    cancelText = notification.cancel_text;
+                }
                 const cancel = {
-                    text: self.__('Cancel'),
+                    text: self.__(cancelText),
                     onClick: (e, toast) => {
                         toast.goAway(0);
                     }
                 }
 
                 let actions = []
+
+                if (notification.show_open) {
+                    actions.push(open)
+                }
 
                 if (notification.show_mark_as_read) {
                     actions.push(markAsRead)

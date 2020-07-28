@@ -35,8 +35,10 @@ class NotificationTest extends TestCase
         $this->assertArrayHasKey('created_at', $notification);
         $this->assertArrayHasKey('show_mark_as_read', $notification);
         $this->assertArrayHasKey('show_cancel', $notification);
+        $this->assertArrayHasKey('show_open', $notification);
         $this->assertTrue($notification['show_mark_as_read']);
         $this->assertTrue($notification['show_cancel']);
+        $this->assertFalse($notification['show_open']);
     }
 
     /**
