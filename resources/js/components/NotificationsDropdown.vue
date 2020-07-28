@@ -16,7 +16,7 @@
         </span>
         </dropdown-trigger>
 
-        <dropdown-menu slot="menu" width="600" direction="rtl">
+        <dropdown-menu slot="menu" :width="600" direction="rtl">
             <loading-view :loading="isLoading">
                 <div class="flex justify-between bg-40 text-90 p-4">
                     <h3>{{ __('Notifications') }}</h3>
@@ -28,7 +28,7 @@
                 <p v-if="count === 0" class="block p-3">
                     {{ __('No new notifications') }}
                 </p>
-                <scroll-wrap v-else height="350">
+                <scroll-wrap v-else :height="350">
                     <slot>
                         <notification-item
                             :ref="'notification-' + notification.id"
