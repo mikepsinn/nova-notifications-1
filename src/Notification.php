@@ -47,6 +47,9 @@ class Notification implements NotificationContract, Arrayable
 
     public function link(string $value, bool $external = false): Notification
     {
+        if(!empty($this->notification['route'])){
+            throw new \LogicException("Only one of route or url may be defined");
+        }
         $this->notification['url'] = $value;
         $this->notification['external'] = $external;
         return $this;
@@ -54,6 +57,9 @@ class Notification implements NotificationContract, Arrayable
 
     public function route(string $name, string $resourceName, $resourceId = null): Notification
     {
+        if(!empty($this->notification['url'])){
+            throw new \LogicException("Only one of route or url may be defined");
+        }
         $this->notification['route'] = [
             'name' => $name,
             'params' => ['resourceName' => $resourceName]
