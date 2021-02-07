@@ -103,20 +103,28 @@
                 const open = {
                     text: self.__('Open'),
                     onClick: (e, toast) => {
-                        let key = 'notification-' + notification.id;
-                        let arr = self.$refs[key];
-                        arr[0].markAsRead();
+                        //let key = 'notification-' + notification.id;
+                        //let arr = self.$refs[key];
+                        //arr[0].markAsRead(); // Not sure why n.$refs[i][0] isn't defined?
+                        //debugger
+                        axios.patch('/nova-vendor/nova-notifications/' +  notification.id)
+                            .then(response => {
+                              if (response.data.notification.read_at) {
+                                Nova.$emit('notification-read', {notification: response.data.notification})
+                              }
+                            })
                         toast.goAway(0);
 
                         if(notification.url) {
                             if(notification.external){
-                                window.open(URL, '_blank');
+                                window.open(notification.url, '_blank');
                             } else {
                                 window.location.href = url;
                             }
                         } else if (notification.route) {
                             router.push(notification.route)
                         } else {
+                            debugger
                             throw "No url or route to send to"
                         }
                     }
@@ -147,7 +155,7 @@
                     actions.push(cancel)
                 }
 
-                self.$toasted.show(notification.title, {
+                self.$toasted.show(" " + notification.title, {
                     type: level,
                     keepOnHover: true,
                     icon: notification.icon || null,
