@@ -1100,7 +1100,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var markAsRead = {
                 text: self.__('Mark as Read'),
                 onClick: function onClick(e, toast) {
-                    self.$refs['notification-' + notification.id][0].markAsRead();
+                    //self.$refs['notification-' + notification.id][0].markAsRead() // Not sure why n.$refs[i][0] isn't defined?
+                    axios.patch('/nova-vendor/nova-notifications/' + notification.id).then(function (response) {
+                        if (response.data.notification.read_at) {
+                            Nova.$emit('notification-read', { notification: response.data.notification });
+                        }
+                    });
                     toast.goAway(0);
                 }
             };

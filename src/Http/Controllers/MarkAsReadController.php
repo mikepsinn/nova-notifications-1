@@ -8,13 +8,22 @@ use Illuminate\Support\Facades\Response;
 
 class MarkAsReadController
 {
-	public function __invoke(Request $request, $notification)
+    /**
+     * @param Request $request
+     * @param $notification
+     * @return mixed
+     * @throws \Exception
+     */
+    public function __invoke(Request $request, $notification)
 	{
-		$markRead = $request
-			->user()
-			->unreadNotifications()
-			->find($notification)
-			->markAsRead();
+	    $n = $request
+            ->user()
+            ->unreadNotifications()
+            ->find($notification);
+	    if(!$n){
+	        throw new \Exception("Notification not found: ".print_r($notification, true));
+        }
+		$markRead = $n->markAsRead();
 
 		return Response::json([
 			'notification' => $request
